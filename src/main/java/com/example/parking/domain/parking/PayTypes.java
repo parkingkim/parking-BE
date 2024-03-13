@@ -2,6 +2,7 @@ package com.example.parking.domain.parking;
 
 import jakarta.persistence.Embeddable;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -33,5 +34,10 @@ public class PayTypes {
                 .sorted()
                 .collect(Collectors.joining(DELIMITER))
         );
+    }
+
+    public boolean contains(List<PayType> memberPayTypes) {
+        return memberPayTypes.stream()
+                .anyMatch(payType -> this.description.contains(payType.getDescription()));
     }
 }

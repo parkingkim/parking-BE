@@ -5,6 +5,10 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 
 @Getter
 @EqualsAndHashCode
@@ -12,19 +16,19 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Location {
 
-    private static final Location NO_PROVIDE = new Location(-1.0, -1.0);
+    private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+    private static final Location NO_PROVIDE = Location.of(-1.0, -1.0);
 
-    private double longitude;
-    private double latitude;
+    private Point point;
 
-    private Location(double longitude, double latitude) {
-        this.longitude = longitude;
-        this.latitude = latitude;
+    private Location(Point point) {
+        this.point = point;
     }
 
     public static Location of(Double longitude, Double latitude) {
         try {
-            return new Location(longitude, latitude);
+            Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+            return new Location(point);
         } catch (NullPointerException e) {
             return NO_PROVIDE;
         }
@@ -32,9 +36,17 @@ public class Location {
 
     public static Location of(String longitude, String latitude) {
         try {
-            return new Location(Double.parseDouble(longitude), Double.parseDouble(latitude));
+            return Location.of(Double.parseDouble(longitude), Double.parseDouble(latitude));
         } catch (NumberFormatException | NullPointerException e) {
             return NO_PROVIDE;
         }
+    }
+
+    public double getLatitude() {
+        return point.getY();
+    }
+
+    public double getLongitude() {
+        return point.getX();
     }
 }

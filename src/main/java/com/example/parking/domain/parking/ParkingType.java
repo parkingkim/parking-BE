@@ -28,4 +28,8 @@ public enum ParkingType implements SearchConditionAvailable {
                 .findAny()
                 .orElse(NO_INFO);
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

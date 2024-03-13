@@ -1,13 +1,45 @@
 package com.example.parking.domain.parking;
 
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
 class ParkingTest {
+
+    @Test
+    void 목적지와_68미터_떨어진_주차장_도보_예상시간_계산() {
+        // given (parking 과 destination 거리 68m)
+        int expectedTime = (int) Math.ceil(0.068 / 5);
+        Parking parking = Parking.builder()
+                .location(Location.of(127.1215865, 37.4811181))
+                .build();
+        Location destination = Location.of(127.1213647, 37.4817298);
+
+        // when
+        int walkingTime = parking.calculateWalkingTime(destination);
+
+        // then
+        Assertions.assertThat(walkingTime).isEqualTo(expectedTime);
+    }
+
+    @Test
+    void 목적지와_333미터_떨어진_주차장_도보_예상시간_계산() {
+        // given (parking 과 destination 거리 68m)
+        int expectedTime = (int) Math.ceil(0.333 / 5);
+        Parking parking = Parking.builder()
+                .location(Location.of(127.1215865, 37.4811181))
+                .build();
+        Location destination = Location.of(127.1186224, 37.479259);
+
+        // when
+        int walkingTime = parking.calculateWalkingTime(destination);
+
+        // then
+        Assertions.assertThat(walkingTime).isEqualTo(expectedTime);
+    }
 
     @ParameterizedTest
     @MethodSource("getParking")

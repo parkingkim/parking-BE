@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ParkingFeeCalculator {
 
     public Fee calculateParkingFee(Parking parking, LocalDateTime beginTime, LocalDateTime endTime) {
@@ -26,7 +28,8 @@ public class ParkingFeeCalculator {
 
     private List<DayParking> separateDate(LocalDateTime beginTime, LocalDateTime endTime) {
         if (isSameDate(beginTime, endTime)) {
-            return List.of(new DayParking(Day.from(beginTime.getDayOfWeek()), beginTime.toLocalTime(), endTime.toLocalTime()));
+            return List.of(
+                    new DayParking(Day.from(beginTime.getDayOfWeek()), beginTime.toLocalTime(), endTime.toLocalTime()));
         }
 
         List<DayParking> dayParkingDates = new ArrayList<>();

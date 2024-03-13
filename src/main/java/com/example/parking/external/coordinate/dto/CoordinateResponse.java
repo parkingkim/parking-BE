@@ -21,17 +21,14 @@ public class CoordinateResponse {
     }
 
     @NoArgsConstructor
+    @Getter
     public static class ExactLocation {
-        private Double x;
-        private Double y;
 
-        public Double getLatitude() {
-            return y;
-        }
+        @JsonProperty("x")
+        private Double latitude;
 
-        public Double getLongitude() {
-            return x;
-        }
+        @JsonProperty("y")
+        private Double longitude;
     }
 
     @Getter
