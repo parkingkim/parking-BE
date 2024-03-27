@@ -6,7 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Parking extends AuditingEntity {
+
+    private static final int MINUTE_UNIT = 60;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +41,17 @@ public class Parking extends AuditingEntity {
 
     @Embedded
     private FeePolicy feePolicy;
+
+    public Parking(Long id, BaseInformation baseInformation, Location location, Space space,
+                   FreeOperatingTime freeOperatingTime, OperatingTime operatingTime, FeePolicy feePolicy) {
+        this.id = id;
+        this.baseInformation = baseInformation;
+        this.location = location;
+        this.space = space;
+        this.freeOperatingTime = freeOperatingTime;
+        this.operatingTime = operatingTime;
+        this.feePolicy = feePolicy;
+    }
 
     public Parking(BaseInformation baseInformation, Location location, Space space,
                    FreeOperatingTime freeOperatingTime, OperatingTime operatingTime, FeePolicy feePolicy) {
@@ -70,6 +84,12 @@ public class Parking extends AuditingEntity {
 
     public void update(Location location) {
         this.location = location;
+    }
+
+    public int calculateUpdatedDiff(LocalDateTime now) {
+        Duration diff = Duration.between(now, getUpdatedAt());
+        Long diffMinute = diff.getSeconds() / MINUTE_UNIT;
+        return diffMinute.intValue();
     }
 
     @Override

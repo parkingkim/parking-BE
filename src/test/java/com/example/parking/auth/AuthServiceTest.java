@@ -1,15 +1,7 @@
 package com.example.parking.auth;
 
-import com.example.parking.support.exception.ClientException;
-import com.example.parking.support.exception.ExceptionInformation;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static com.example.parking.support.exception.ExceptionInformation.*;
+import static com.example.parking.support.exception.ExceptionInformation.INVALID_AUTH_CODE;
+import static com.example.parking.support.exception.ExceptionInformation.UNAUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,24 +9,18 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.example.parking.auth.authcode.AuthCodeCategory;
 import com.example.parking.auth.authcode.AuthCodePlatform;
-import com.example.parking.auth.authcode.InValidAuthCodeException;
 import com.example.parking.auth.authcode.application.dto.AuthCodeCertificateRequest;
 import com.example.parking.auth.authcode.application.dto.AuthCodeRequest;
 import com.example.parking.auth.session.MemberSession;
-import com.example.parking.config.TestConfig;
 import com.example.parking.container.ContainerTest;
+import com.example.parking.support.exception.ClientException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
-@Import({TestConfig.class})
 class AuthServiceTest extends ContainerTest {
 
     private static final String AUTH_CODE = "111111";
 
-    @Autowired
-    private AuthService authService;
 
     @Test
     void 세션_아이디에_해당하는_세션을_찾는다() {
